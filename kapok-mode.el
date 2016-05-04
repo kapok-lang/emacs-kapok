@@ -52,7 +52,34 @@
   :link '(url-link :tag "Github" "https://github.com/kapok-lang/emacs-kapok")
   :link '(emacs-commentary-link :tag "Commentary" "kapok-mode"))
 
+(defvar kapok-mode-syntax-table
+  (let ((table (copy-syntax-table emacs-lisp-mode-syntax-table)))
+    (modify-syntax-entry ?~ "'   " table)
+    (modify-syntax-entry ?\{ "(}" table)
+    (modify-syntax-entry ?\} "){" table)
+    (modify-syntax-entry ?\[ "(]" table)
+    (modify-syntax-entry ?\] ")[" table)
+    table))
 
+(defvar kapok-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map lisp-mode-shared-map)
+    map)
+  "Keymap for Kapok mode.")
+
+;;;###autoload
+(define-derived-mode kapok-mode lisp-mode "Kapok"
+  "Major mode for editing Kapok code."
+
+  (interactive)
+  (setq major-mode 'kapok-mode)
+  (setq mode-name "Kapok")
+  (set-syntax-table kapok-mode-syntax-table)
+  (use-local-map kapok-mode-map)
+  )
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.kpk\\'" . kapok-mode))
 
 (provide 'kapok-mode)
 
